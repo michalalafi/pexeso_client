@@ -1,0 +1,67 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 18.10.2018, 17:37:29
+    Author     : Michal-PC
+*/
+#menu-label{
+    -fx-font-size: 50px;
+    -fx-text-fill: white;
+}
+#menu-vbox {
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+#menu-borderPane, #lobby-borderPane{
+    -fx-background-color: #666666;
+    -fx-pref-width: 800px;
+    -fx-pref-height: 600px;
+}
+#default-button{
+    -fx-font-size: 25px;
+}
+#default-button:hover{
+    -fx-background-color: #cccccc;
+}
+#lobby-header-label{
+    -fx-font-size: 50px;
+    -fx-text-fill: white;
+}
+#lobby-online-label{
+    -fx-padding: 20 20 0 0;
+    -fx-text-fill: #00d752;
+    -fx-font-size: 25px;
+}
+#lobby-nickname-label{
+    -fx-padding: 20 0 0 20;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 25px;
+}
+#lobby-top-hbox{
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+#lobby-center-vbox{
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+#lobby-bottom-hbox{
+    -fx-alignment: center;
+    -fx-spacing: 5px;
+}
+#lobby-players-label{
+    -fx-font-size: 25px;
+    -fx-text-fill: #00d752;
+}
+#lobby-top-hbox{
+    -fx-alignment: center;
+    -fx-spacing: 50px;
+}
+
+/* Debug */
+#menu-vbox, #menu-label, #menu-borderPane, #lobby-top-hbox, #lobby-header-label,#lobby-center-vbox,#lobby-borderPane, #lobby-bottom-hbox{
+        -fx-border-color: red;
+}

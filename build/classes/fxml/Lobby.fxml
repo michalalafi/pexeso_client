@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="lobby-borderPane" stylesheets="/css/default.css" xmlns="http://javafx.com/javafx/8" fx:controller="fxml.LobbyController">
+    <top>
+      <HBox id="lobby-top-hbox">
+          <children>
+              <Label id="lobby-nickname-label" text="NickName" /> 
+              <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
+              <Label id="lobby-online-label" text="Online" />
+          </children>
+      </HBox>
+   </top>
+   <center>
+      <VBox id="lobby-center-vbox">
+         <children>
+            <Label id="lobby-header-label" text="Lobby"/>
+            <Region  prefHeight="50.0" HBox.hgrow="ALWAYS" />
+            <Button id="default-button" fx:id="btnNewGame" onAction="#newGame" text="New Game" />
+            <Button id="default-button" fx:id="btnBack" onAction="#back" text="Back" />
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+       <HBox id="lobby-bottom-hbox">
+            <Label id="lobby-players-label" text="Online players:" />
+            <Label id="lobby-players-label" text="0" /> 
+       </HBox>
+   </bottom>
+</BorderPane>
