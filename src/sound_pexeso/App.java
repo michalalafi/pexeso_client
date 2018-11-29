@@ -5,7 +5,17 @@
  */
 package sound_pexeso;
 
+import controllers.LobbyController;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StreamCorruptedException;
+import java.net.Socket;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -23,6 +33,9 @@ public class App extends Application {
     
     private static Stage primaryStage;
     
+    private static LobbyController lobby;
+    
+    
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
@@ -34,8 +47,18 @@ public class App extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args){
+        
         launch(args);
+        
+        Scanner inputReader = new Scanner(System.in);
+       /* while(true){
+            System.out.print(">");
+            String line = inputReader.nextLine();
+            System.out.println("");
+            tcpClient.send(line);
+        } */
+        
     }
     
     public static void menu(){
@@ -60,6 +83,7 @@ public class App extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(LOBBY_FXML));
             Parent root = fxmlLoader.load();
             
+            lobby = (LobbyController) fxmlLoader.getController();
             Scene scene = new Scene(root);
         
             primaryStage.setScene(scene);
@@ -68,6 +92,10 @@ public class App extends Application {
         catch(IOException e){
             e.printStackTrace();
         }
+    }
+    
+    public static LobbyController getLobbyController(){   
+        return lobby;
     }
     
 }
