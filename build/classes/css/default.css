@@ -7,15 +7,18 @@ and open the template in the editor.
     Created on : 18.10.2018, 17:37:29
     Author     : Michal-PC
 */
-#menu-label{
+#menu-label, #lobby-header-label, #session-label, #session-id-label{
     -fx-font-size: 50px;
     -fx-text-fill: white;
 }
-#menu-vbox {
+
+#menu-vbox, #lobby-top-hbox, #lobby-center-vbox, #lobby-bottom-hbox, #lobby-top-hbox, 
+#game-center-hbox, #game-top-session-hbox, #waiting-top-session-hbox, #waiting-top-hbox,
+#waiting-center-vbox{
     -fx-alignment: center;
     -fx-spacing: 5px;
 }
-#menu-borderPane, #lobby-borderPane{
+#menu-borderPane, #lobby-borderPane, #game-borderPane, #waiting-borderPane{
     -fx-background-color: #666666;
     -fx-pref-width: 800px;
     -fx-pref-height: 600px;
@@ -23,45 +26,46 @@ and open the template in the editor.
 #default-button{
     -fx-font-size: 25px;
 }
+#waiting-header-label{
+    -fx-text-fill:red;
+    -fx-font-size: 25px;
+}
 #default-button:hover{
     -fx-background-color: #cccccc;
 }
-#lobby-header-label{
-    -fx-font-size: 50px;
-    -fx-text-fill: white;
-}
-#lobby-online-label{
+#online-label, #score-label-right{
     -fx-padding: 20 20 0 0;
     -fx-text-fill: #00d752;
     -fx-font-size: 25px;
 }
-#lobby-nickname-label{
+#nickname-label, #score-label-left{
     -fx-padding: 20 0 0 20;
-    -fx-text-fill: #ffffff;
+    -fx-text-fill: #00d752;
     -fx-font-size: 25px;
-}
-#lobby-top-hbox{
-    -fx-alignment: center;
-    -fx-spacing: 5px;
-}
-#lobby-center-vbox{
-    -fx-alignment: center;
-    -fx-spacing: 5px;
-}
-#lobby-bottom-hbox{
-    -fx-alignment: center;
-    -fx-spacing: 5px;
 }
 #lobby-players-label{
     -fx-font-size: 25px;
     -fx-text-fill: #00d752;
 }
-#lobby-top-hbox{
+.game-pexeso-play-button{
+    -fx-pref-width: 50px;
+    -fx-pref-height: 50px;
+}
+#game-board-flow-pane{
+    -fx-orientation: vertical;
     -fx-alignment: center;
-    -fx-spacing: 50px;
+    -fx-hgap: 10px;
+    -fx-vgap: 10px;
+    -fx-max-height: 500px;
+    -fx-min-height: 500px;
+}
+#game-top-score-hbox{
+    -fx-vgap: 10px;   
 }
 
 /* Debug */
-#menu-vbox, #menu-label, #menu-borderPane, #lobby-top-hbox, #lobby-header-label,#lobby-center-vbox,#lobby-borderPane, #lobby-bottom-hbox{
+#menu-vbox, #menu-label, #menu-borderPane, #lobby-top-hbox, #lobby-header-label,#lobby-center-vbox,#lobby-borderPane, #lobby-bottom-hbox,#game-center-hbox,#game-board-flow-pane
+
+{
         -fx-border-color: red;
 }

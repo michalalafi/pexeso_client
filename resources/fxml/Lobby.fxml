@@ -8,13 +8,13 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" id="lobby-borderPane" stylesheets="/css/default.css" xmlns="http://javafx.com/javafx/8" fx:controller="controllers.LobbyController">
     <top>
-      <HBox id="lobby-top-hbox">
-          <children>
-              <Label id="lobby-nickname-label" fx:id="lbUserName" text="UserName" /> 
-              <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
-              <Label id="lobby-online-label" text="Online" />
-          </children>
-      </HBox>
+        <HBox id="lobby-top-hbox">
+            <children>
+                <Label id="nickname-label" fx:id="lbUserName" text="UserName" /> 
+                <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
+                <Label id="online-label" text="Online" />
+            </children>
+        </HBox>
    </top>
    <center>
       <VBox id="lobby-center-vbox">

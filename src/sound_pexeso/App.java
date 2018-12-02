@@ -5,7 +5,9 @@
  */
 package sound_pexeso;
 
+import controllers.GameController;
 import controllers.LobbyController;
+import controllers.WaitingController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -30,10 +32,13 @@ import javax.imageio.IIOException;
 public class App extends Application {
     private static final String MENU_FXML  = "/fxml/Menu.fxml";
     private static final String LOBBY_FXML  = "/fxml/Lobby.fxml";
+    private static final String GAME_FXML = "/fxml/Game.fxml";
+    private static final String WAITING_FXML = "/fxml/Waiting.fxml";
     
     private static Stage primaryStage;
     
     private static LobbyController lobby;
+    private static WaitingController waiting;
     
     
     @Override
@@ -93,9 +98,43 @@ public class App extends Application {
             e.printStackTrace();
         }
     }
+    public static void waiting(){
+        try{
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(WAITING_FXML));
+            Parent root = fxmlLoader.load();
+            
+            waiting = (WaitingController) fxmlLoader.getController();
+            Scene scene = new Scene(root);
+        
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+    public static void game(){
+        try{
+            //Pozadat server o pocet puzzli
+            GameController.numberOfPexesos = 8;
+            FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(GAME_FXML));
+            Parent root = fxmlLoader.load();
+                      
+            Scene scene = new Scene(root);
+        
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        }
+        catch(IOException e){
+            e.printStackTrace();
+        }
+    }
     
     public static LobbyController getLobbyController(){   
         return lobby;
+    }
+    public static WaitingController getWaitingController(){
+        return waiting;
     }
     
 }

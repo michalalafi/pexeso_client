@@ -3,17 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/home/michal/Desktop/workspace/pexeso_client/controllers/controllers/WaitingController.java</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/Protocol.java</file>
-            <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/ExpandedBufferedReader.java</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/controllers/controllers/LobbyController.java</file>
-            <file>file:/home/michal/Desktop/workspace/pexeso_client/resources/fxml/Lobby.fxml</file>
+            <file>file:/home/michal/Desktop/workspace/pexeso_client/controllers/controllers/GameController.java</file>
+            <file>file:/home/michal/Desktop/workspace/pexeso_client/utils/utils/SoundPlayer.java</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/controllers/controllers/MenuController.java</file>
-            <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/App.java</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/TcpClient.java</file>
-            <file>file:/home/michal/Desktop/workspace/pexeso_client/resources/fxml/Menu.fxml</file>
-            <file>file:/home/michal/Desktop/workspace/pexeso_client/resources/fxml/Game.fxml</file>
+            <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/App.java</file>
+            <file>file:/home/michal/Desktop/workspace/pexeso_client/resources/fxml/Waiting.fxml</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/MessageProcessing.java</file>
-            <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/CommunicationManager.java</file>
         </group>
     </open-files>
 </project-private>

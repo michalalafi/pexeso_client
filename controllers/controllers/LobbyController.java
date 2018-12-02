@@ -1,12 +1,5 @@
 package controllers;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -15,6 +8,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import sound_pexeso.App;
+import sound_pexeso.Protocol;
+import sound_pexeso.TcpClient;
 
 /**
  * FXML Controller class
@@ -43,6 +38,9 @@ public class LobbyController implements Initializable {
     }
     @FXML
     private void newGame(ActionEvent event) {
+        TcpClient.getConnection().sendSimpleMessage(Protocol.NEW_SESSION_REQUEST,"");
+        //TODO pozadat o prirazeni sessiony
+        //App.game();
     }
 
     @FXML

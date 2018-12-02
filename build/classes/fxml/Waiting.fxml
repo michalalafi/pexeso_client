@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="waiting-borderPane" stylesheets="/css/default.css" xmlns="http://javafx.com/javafx/8" fx:controller="controllers.WaitingController">
+    <top>
+        <VBox>
+            <children>
+                <HBox id="waiting-top-session-hbox">
+                    <children>
+                        <Label id="session-label" text="Session:"/>
+                        <Label id="session-id-label" fx:id="lbSessionId" text="0"/>
+                    </children>                        
+                </HBox>
+                <HBox id="waiting-top-hbox">
+                    <children>
+                        <Label id="nickname-label" fx:id="lbUserName" text="UserName" /> 
+                        <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
+                        <Label id="online-label" text="Online" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+   </top>
+   <center>
+      <VBox id="waiting-center-vbox">
+         <children>
+            <Label id="waiting-header-label" fx:id="lbWaiting" text="Waiting..."/>
+            <Region  prefHeight="50.0" HBox.hgrow="ALWAYS" />
+         </children>
+      </VBox>
+   </center>
+   <bottom>
+   </bottom>
+</BorderPane>

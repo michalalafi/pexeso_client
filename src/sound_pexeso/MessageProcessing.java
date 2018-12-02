@@ -24,8 +24,8 @@ public class MessageProcessing {
         }
         
         sb.append(requestId);
+        sb.append('|');
         if(!params.equalsIgnoreCase("")){
-            sb.append('|');
             sb.append(params);
         }
        
