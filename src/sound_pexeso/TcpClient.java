@@ -23,7 +23,7 @@ public class TcpClient implements Runnable{
     private ExpandedBufferedReader reader;
     private PrintWriter writer;
     
-    private static final String SOUNDS_PATH="../sounds";
+    private static final String SOUNDS_PATH="../sounds/";
     //Client id
     private int clientId;
     public TcpClient(){
@@ -135,10 +135,22 @@ public class TcpClient implements Runnable{
                     break;
             case NEW_GAME_BEGIN_RESPONSE:
                     newGameBegin(parts);
-                    break;              
+                    break;  
+            case IS_PLAYER_TURN_RESPONSE:
+                    playersTurn(parts);
+                    break;
+            case PLAY_AGAIN_RESPONSE:
+                    playAgain(parts);
+                    break;
             case PEXESO_REVEAL_RESPONSE:
                     // play sound
                     revealSound(parts);
+                    break;
+            case PEXESO_REVEAL_ID_RESPONSE:
+                    revealPexesoPlayed(parts);
+                    break;
+            case SUCCESFULLY_REVEALED_PEXESO_RESPONSE:
+                    successfullyRevealedPexesos(parts);
                     break;
                     
             
@@ -172,14 +184,61 @@ public class TcpClient implements Runnable{
             App.getWaitingController().setWaitingLabel("Wait for second player to join...");
         });
     }
+    private void playersTurn(String[] parts){
+        System.out.println("Players turn: " + parts[1]);
+        boolean isPlayersTurn = Integer.parseInt(parts[1]) != 1;
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                Platform.runLater(() -> { 
+                    App.getGameController().getGameBoard().resetNotRevealedPlaySoundButtons();
+                    App.getGameController().setGameBoardDisable(isPlayersTurn);
+                });
+            }
+        }, 3000);
+    }
+    private void playAgain(String[] parts){
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                Platform.runLater(() -> { 
+                    App.getGameController().setGameBoardDisable(false);
+                });
+            }
+        }, 3000);
+    }
     private void newGameBegin(String[] parts){
         System.out.println("Zacina nova hra");
         Platform.runLater(() -> {
             App.game();
+            App.getGameController().setGameBoardDisable(true);
         });
     }
     private void revealSound(String[] parts){
+        //Muzeme pustit takhle protoze to bezi asynchrone
         SoundPlayer.playSound(SOUNDS_PATH + parts[1]);
+        
+    }
+    private void revealPexesoPlayed(String[] parts){
+        //Oznacime odhalenou pexeso
+        Platform.runLater(() -> {
+            //TODO OSETRIT PARSE INT
+            App.getGameController().setPlayedPexeso(Integer.parseInt(parts[1]));
+        });
+    }
+    private void successfullyRevealedPexesos(String[] parts){
+        String[] ids = parts[1].split("\\;");
+        int first_id = Integer.parseInt(ids[0]);
+        int second_id = Integer.parseInt(ids[1]);
+        
+        //Oznacime uspesne odhalene pexeso
+        Platform.runLater(() -> {
+            //TODO OSETRIT PARSE INT
+            App.getGameController().getGameBoard().setPlaySoundButtonRevealed(first_id);
+            App.getGameController().getGameBoard().setPlaySoundButtonRevealed(second_id);
+        });
     }
     
 }

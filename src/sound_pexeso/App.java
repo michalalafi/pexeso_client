@@ -22,8 +22,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javax.imageio.IIOException;
+import utils.SoundPlayer;
 
 /**
  *
@@ -39,6 +41,7 @@ public class App extends Application {
     
     private static LobbyController lobby;
     private static WaitingController waiting;
+    private static GameController game;
     
     
     @Override
@@ -52,18 +55,8 @@ public class App extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args){
-        
-        launch(args);
-        
-        Scanner inputReader = new Scanner(System.in);
-       /* while(true){
-            System.out.print(">");
-            String line = inputReader.nextLine();
-            System.out.println("");
-            tcpClient.send(line);
-        } */
-        
+    public static void main(String[] args){      
+        launch(args);     
     }
     
     public static void menu(){
@@ -119,6 +112,8 @@ public class App extends Application {
             GameController.numberOfPexesos = 8;
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(GAME_FXML));
             Parent root = fxmlLoader.load();
+            
+            game = (GameController) fxmlLoader.getController();
                       
             Scene scene = new Scene(root);
         
@@ -135,6 +130,9 @@ public class App extends Application {
     }
     public static WaitingController getWaitingController(){
         return waiting;
+    }
+    public static GameController getGameController(){
+        return game;
     }
     
 }

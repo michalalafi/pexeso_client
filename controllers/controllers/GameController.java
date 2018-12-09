@@ -38,10 +38,23 @@ public class GameController implements Initializable {
     }
     
     public static void pexesoPlaySoundButtonClick(PexesoPlaySoundButton sender){
+        App.getGameController().setGameBoardDisable(true);
+        
         int pexesoId = sender.getButonId();
         // Posli serveru stisknute pexeso
         // Server az posle zpravu zacne hrat zvuk
         TcpClient.getConnection().sendSimpleMessage(Protocol.PEXESO_REVEAL_REQUEST, Integer.toString(pexesoId));
+    }
+    
+    public void setGameBoardDisable(boolean value){
+        this.gameBoard.setDisableAllPlayButtons(value);
+    }
+    
+    public void setPlayedPexeso(int id){
+        this.gameBoard.setPlaySoundButtonPlayed(id);
+    }
+    public PexesoFlowPane getGameBoard(){
+        return this.gameBoard;
     }
     
     

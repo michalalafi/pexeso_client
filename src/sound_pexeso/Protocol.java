@@ -23,4 +23,8 @@ public class Protocol {
         public static final int NEW_GAME_BEGIN_RESPONSE = 13;
         public static final int PEXESO_REVEAL_REQUEST = 20;
         public static final int PEXESO_REVEAL_RESPONSE = 20; 
+        public static final int IS_PLAYER_TURN_RESPONSE = 21;
+        public static final int PEXESO_REVEAL_ID_RESPONSE = 24;
+        public static final int SUCCESFULLY_REVEALED_PEXESO_RESPONSE = 23;
+        public static final int PLAY_AGAIN_RESPONSE = 25;
 }

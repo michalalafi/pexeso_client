@@ -8,6 +8,7 @@ package utils;
 import java.io.File;
 import javafx.util.Duration;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaException;
 import javafx.scene.media.MediaPlayer;
 
 /**
@@ -19,7 +20,14 @@ public class SoundPlayer {
     
     public static void playSound(String soundPath){
         System.out.println("SoundPath: "+soundPath);
-        Media sound = new Media(new File(soundPath).toURI().toString());
+        Media sound;
+        try{
+            sound = new Media(new File(soundPath).toURI().toString());
+        }
+        catch(MediaException e){
+            System.out.println("Sound not loaded");
+            return;
+        }
         
         mediaPlayer = new MediaPlayer(sound);
         

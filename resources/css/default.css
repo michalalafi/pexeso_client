@@ -51,6 +51,12 @@ and open the template in the editor.
     -fx-pref-width: 50px;
     -fx-pref-height: 50px;
 }
+.game-pexeso-play-button-played{
+    -fx-background-color: #e22525; 
+}
+.game-pexeso-play-button-revealed{
+    -fx-background-color: #00d752;
+}
 #game-board-flow-pane{
     -fx-orientation: vertical;
     -fx-alignment: center;
