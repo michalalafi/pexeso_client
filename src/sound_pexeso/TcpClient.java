@@ -20,12 +20,11 @@ import utils.SoundPlayer;
 public class TcpClient implements Runnable{
     
     private static TcpClient connection;
+    private static Client client;
     private ExpandedBufferedReader reader;
     private PrintWriter writer;
     
     private static final String SOUNDS_PATH="../sounds/";
-    //Client id
-    private int clientId;
     public TcpClient(){
         this.reader = null;
         this.writer = null;
@@ -41,8 +40,11 @@ public class TcpClient implements Runnable{
     public static TcpClient getConnection(){
         return connection;
     }
+    public static Client getClient(){
+        return client;
+    }
     private void connect(){
-        Socket s = null;
+        Socket s;
         try{
             s = new Socket("127.0.0.1", 10000);
             InetAddress adress = s.getInetAddress();
@@ -54,6 +56,7 @@ public class TcpClient implements Runnable{
             writer = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
         }
         catch(NullPointerException | IOException e){ return;}
+        client = new Client();
         System.out.println("Client connected!");
         listen();
     }
@@ -74,7 +77,7 @@ public class TcpClient implements Runnable{
         }, 100, 100);
     }
     public void sendSimpleMessage(int requestId, String params){
-        String message = MessageProcessing.createMessageForServer(Integer.toString(this.clientId), Integer.toString(requestId), params);
+        String message = MessageProcessing.createMessageForServer(Integer.toString(client.getClientId()), Integer.toString(requestId), params);
         //TODO posilat dokud send nebude true?
         send(message);    
     }
@@ -152,23 +155,31 @@ public class TcpClient implements Runnable{
             case SUCCESFULLY_REVEALED_PEXESO_RESPONSE:
                     successfullyRevealedPexesos(parts);
                     break;
-                    
-            
+            case SCORE_RESPONSE:
+                    setScore(parts);
+                    break;                     
+            case WANT_TO_PLAY_GAME_RESPONSE:
+                    wantToPlayGame();
+                    break;
+            case WAIT_FOR_OPPONENT_DECIDE_RESPONSE:
+                    waitForOpponentDecide();
+                    break;
         }
         
     }
     
     private void setClientName(String[] parts){
         System.out.println("New client name is: "+ parts[1]);
-        Platform.runLater(() -> {
-            App.lobby();
-            App.getLobbyController().setClientName(parts[1]);
-        });
+        client.setClientName(parts[1]);
     }
     
     private void setClientId(String[] parts){
         System.out.println("New client id is: " + parts[1]);
-        this.clientId = Integer.parseInt(parts[1]);
+        client.setClientId(Integer.parseInt(parts[1]));
+        
+        Platform.runLater(() -> {
+            App.lobby();
+        });
     }
     
     private void setSessionId(String[] parts){
@@ -193,7 +204,7 @@ public class TcpClient implements Runnable{
             public void run(){
                 Platform.runLater(() -> { 
                     App.getGameController().getGameBoard().resetNotRevealedPlaySoundButtons();
-                    App.getGameController().setGameBoardDisable(isPlayersTurn);
+                    App.getGameController().getGameBoard().setDisableAllNotReveleadPlaySoundButtons(isPlayersTurn);
                 });
             }
         }, 3000);
@@ -204,7 +215,7 @@ public class TcpClient implements Runnable{
             @Override
             public void run(){
                 Platform.runLater(() -> { 
-                    App.getGameController().setGameBoardDisable(false);
+                    App.getGameController().getGameBoard().setDisableAllNotReveleadPlaySoundButtons(false);
                 });
             }
         }, 3000);
@@ -213,7 +224,7 @@ public class TcpClient implements Runnable{
         System.out.println("Zacina nova hra");
         Platform.runLater(() -> {
             App.game();
-            App.getGameController().setGameBoardDisable(true);
+            App.getGameController().getGameBoard().setDisableAllNotReveleadPlaySoundButtons(true);
         });
     }
     private void revealSound(String[] parts){
@@ -225,7 +236,7 @@ public class TcpClient implements Runnable{
         //Oznacime odhalenou pexeso
         Platform.runLater(() -> {
             //TODO OSETRIT PARSE INT
-            App.getGameController().setPlayedPexeso(Integer.parseInt(parts[1]));
+            App.getGameController().getGameBoard().setPlaySoundButtonPlayed(Integer.parseInt(parts[1]));
         });
     }
     private void successfullyRevealedPexesos(String[] parts){
@@ -238,6 +249,25 @@ public class TcpClient implements Runnable{
             //TODO OSETRIT PARSE INT
             App.getGameController().getGameBoard().setPlaySoundButtonRevealed(first_id);
             App.getGameController().getGameBoard().setPlaySoundButtonRevealed(second_id);
+        });
+    }
+    
+    private void setScore(String[] parts){
+        Platform.runLater(() -> {
+            App.getGameController().setScore(parts[1].split("\\;"));
+        });
+        
+    }
+    private void wantToPlayGame(){
+        System.out.println("want to play");
+        Platform.runLater(() -> {
+            App.getWaitingController().newGameConfirmation();
+        });
+    }
+    private void waitForOpponentDecide(){
+        System.out.println("Wait for opponent decide");
+        Platform.runLater(() -> {
+            App.getWaitingController().setWaitingLabel("Wait for opponent answer...");
         });
     }
     

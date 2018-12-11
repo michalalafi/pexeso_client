@@ -12,7 +12,7 @@
             <children>
                 <Label id="nickname-label" fx:id="lbUserName" text="UserName" /> 
                 <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
-                <Label id="online-label" text="Online" />
+                <Label id="online-label" fx:id="lbOnline" text="Online" />
             </children>
         </HBox>
    </top>

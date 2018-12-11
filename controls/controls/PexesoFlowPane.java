@@ -26,7 +26,7 @@ public class PexesoFlowPane extends FlowPane {
         }
     }
     
-    public void setDisableAllPlayButtons(boolean value){
+    public void setDisableAllNotReveleadPlaySoundButtons(boolean value){
         for(int i = 0; i < GameController.numberOfPexesos; i++){
             PexesoPlaySoundButton btn = this.notReveleadPlaySoundButtons[i];
             if(btn != null){

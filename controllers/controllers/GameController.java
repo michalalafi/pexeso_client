@@ -28,6 +28,11 @@ public class GameController implements Initializable {
     @FXML
     PexesoFlowPane gameBoard;
     
+    @FXML
+    Label lbP1Score;
+    @FXML
+    Label lbP2Score;
+    
     public static int numberOfPexesos = 4;
     /**
      * Initializes the controller class.
@@ -38,7 +43,7 @@ public class GameController implements Initializable {
     }
     
     public static void pexesoPlaySoundButtonClick(PexesoPlaySoundButton sender){
-        App.getGameController().setGameBoardDisable(true);
+        App.getGameController().getGameBoard().setDisableAllNotReveleadPlaySoundButtons(true);
         
         int pexesoId = sender.getButonId();
         // Posli serveru stisknute pexeso
@@ -46,15 +51,13 @@ public class GameController implements Initializable {
         TcpClient.getConnection().sendSimpleMessage(Protocol.PEXESO_REVEAL_REQUEST, Integer.toString(pexesoId));
     }
     
-    public void setGameBoardDisable(boolean value){
-        this.gameBoard.setDisableAllPlayButtons(value);
-    }
-    
-    public void setPlayedPexeso(int id){
-        this.gameBoard.setPlaySoundButtonPlayed(id);
-    }
     public PexesoFlowPane getGameBoard(){
         return this.gameBoard;
+    }
+    
+    public void setScore(String scores[]){
+        lbP1Score.setText(scores[0]);
+        lbP2Score.setText(scores[1]);
     }
     
     

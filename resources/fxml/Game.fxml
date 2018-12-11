@@ -25,10 +25,10 @@
             <HBox id="game-top-score-hbox">
                 <children>
                     <Label id="score-label-left" text="Score:"/>
-                    <Label id="score-label-left" text="0"/>
+                    <Label id="score-label-left" fx:id="lbP1Score" text="0"/>
                     <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
                     <Label id="score-label-right" text="Score:"/>
-                    <Label id="score-label-right" text="0"/> 
+                    <Label id="score-label-right" fx:id="lbP2Score" text="0"/> 
                 </children>
             </HBox>
           </children>
