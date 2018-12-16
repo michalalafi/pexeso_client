@@ -13,10 +13,18 @@ import sound_pexeso.Client;
  */
 public interface IConnectedController {
     
-    public void setClientName(Client client);
+    public void requestClientName();
+    
+    public void setClientName(String clientName);
+    
+    public void setStatus(String status);
     
     public void connected();
     
     public void disconnected();
+    
+    public void setSessionId(String sessionId);
+    
+    public void requestSessionId();
     
 }

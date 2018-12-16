@@ -10,7 +10,7 @@
     <top>
         <HBox id="lobby-top-hbox">
             <children>
-                <Label id="nickname-label" fx:id="lbUserName" text="UserName" /> 
+                <Label id="nickname-label-left" fx:id="lbUserName" text="UserName" /> 
                 <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
                 <Label id="online-label" fx:id="lbOnline" text="Online" />
             </children>
@@ -27,9 +27,17 @@
       </VBox>
    </center>
    <bottom>
-       <HBox id="lobby-bottom-hbox">
-            <Label id="lobby-players-label" text="Online players:" />
-            <Label id="lobby-players-label" text="0" /> 
-       </HBox>
+       <VBox>
+           <children>
+                <HBox id="lobby-bottom-hbox">
+                    <Label id="lobby-players-label" fx:id="lbNumberOfOnlineClients" text="Online players: 0" />
+                </HBox>
+                <HBox id="lobby-bottom-hbox">
+                    <children>
+                        <Label text="Status:" fx:id="lbStatus" id="status-label"/>
+                    </children>
+                </HBox>
+           </children>
+       </VBox>
    </bottom>
 </BorderPane>

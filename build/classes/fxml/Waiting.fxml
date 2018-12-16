@@ -12,13 +12,12 @@
             <children>
                 <HBox id="waiting-top-session-hbox">
                     <children>
-                        <Label id="session-label" text="Session:"/>
-                        <Label id="session-id-label" fx:id="lbSessionId" text="0"/>
+                        <Label id="session-label" text="Session: 0" fx:id="lbSession"/>
                     </children>                        
                 </HBox>
                 <HBox id="waiting-top-hbox">
                     <children>
-                        <Label id="nickname-label" fx:id="lbUserName" text="UserName" /> 
+                        <Label id="nickname-label-left" fx:id="lbUserName" text="UserName" /> 
                         <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
                         <Label id="online-label" text="Online" />
                     </children>
@@ -35,5 +34,10 @@
       </VBox>
    </center>
    <bottom>
+        <HBox id="lobby-bottom-hbox">
+            <children>
+                <Label text="Status:" fx:id="lbStatus" id="status-label"/>
+            </children>
+        </HBox>
    </bottom>
 </BorderPane>

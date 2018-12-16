@@ -14,7 +14,7 @@ and open the template in the editor.
 
 #menu-vbox, #lobby-top-hbox, #lobby-center-vbox, #lobby-bottom-hbox, #lobby-top-hbox, 
 #game-center-hbox, #game-top-session-hbox, #waiting-top-session-hbox, #waiting-top-hbox,
-#waiting-center-vbox{
+#waiting-center-vbox, #game-top-score-vbox{
     -fx-alignment: center;
     -fx-spacing: 5px;
 }
@@ -33,12 +33,12 @@ and open the template in the editor.
 #default-button:hover{
     -fx-background-color: #cccccc;
 }
-#online-label, #score-label-right{
+#online-label, #score-label-right, #nickname-label-right{
     -fx-padding: 20 20 0 0;
     -fx-text-fill: #00d752;
     -fx-font-size: 25px;
 }
-#nickname-label, #score-label-left{
+#nickname-label-left, #score-label-left{
     -fx-padding: 20 0 0 20;
     -fx-text-fill: #00d752;
     -fx-font-size: 25px;
@@ -46,6 +46,10 @@ and open the template in the editor.
 #lobby-players-label{
     -fx-font-size: 25px;
     -fx-text-fill: #00d752;
+}
+#status-label{
+    -fx-font-size: 25px;
+    -fx-text-fill: #1abae3;
 }
 .game-pexeso-play-button{
     -fx-pref-width: 50px;
@@ -70,8 +74,7 @@ and open the template in the editor.
 }
 
 /* Debug */
-#menu-vbox, #menu-label, #menu-borderPane, #lobby-top-hbox, #lobby-header-label,#lobby-center-vbox,#lobby-borderPane, #lobby-bottom-hbox,#game-center-hbox,#game-board-flow-pane
-
+#menu-vbox, #menu-label, #menu-borderPane, #lobby-top-hbox,#lobby-header-label,#lobby-center-vbox,#lobby-borderPane, #lobby-bottom-hbox,#game-center-hbox
 {
         -fx-border-color: red;
 }

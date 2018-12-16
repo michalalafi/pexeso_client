@@ -27,19 +27,18 @@ public class LobbyController implements Initializable, IConnectedController {
     private Label lbUserName;
     @FXML
     private Label lbOnline;
+    @FXML
+    private Label lbStatus;
+    @FXML
+    private Label lbNumberOfOnlineClients;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Client client = TcpClient.getClient();
-        if(client == null){
-            //Zobrazime ze je neco spatne
-            disconnected();
-            return;
-        }
-        setClientName(client);
+        requestClientName();
+        requestNumberOfOnlineClients();
     }
     
     @FXML
@@ -53,10 +52,15 @@ public class LobbyController implements Initializable, IConnectedController {
     private void back(ActionEvent event) {
         App.menu();
     }
-    
+    public void requestNumberOfOnlineClients(){
+        TcpClient.getConnection().sendSimpleMessage(Protocol.NUMBER_OF_CLIENTS_ONLINE_REQUEST, "");
+    }
+    public void setNumberOfOnlineClients(int number){
+        lbNumberOfOnlineClients.setText("Online players: " + number);
+    }
     @Override
-    public void setClientName(Client client){
-        lbUserName.setText(client.getClientName());
+    public void setClientName(String clientName) {
+        lbUserName.setText(clientName);
     }
     
     @Override
@@ -69,6 +73,26 @@ public class LobbyController implements Initializable, IConnectedController {
     public void disconnected() {
         lbOnline.setText("Offline");
         lbOnline.setStyle("-fx-text-fill: #ff0000");
+    }
+
+    @Override
+    public void setSessionId(String sessionId) {
+        System.out.println("Lobby - set session id");
+    }
+
+    @Override
+    public void requestSessionId() {
+        System.out.println("Lobby - request session id");
+    }
+
+    @Override
+    public void requestClientName() {
+        TcpClient.getConnection().sendSimpleMessage(Protocol.CLIENTS_NAME_REQUEST, "");
+    }
+
+    @Override
+    public void setStatus(String status) {
+        this.lbStatus.setText(status);
     }
     
     

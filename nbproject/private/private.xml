@@ -5,8 +5,11 @@
         <group>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/controllers/controllers/WaitingController.java</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/Protocol.java</file>
+            <file>file:/home/michal/Desktop/workspace/pexeso_client/controllers/controllers/LobbyController.java</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/controllers/controllers/GameController.java</file>
+            <file>file:/home/michal/Desktop/workspace/pexeso_client/resources/fxml/Lobby.fxml</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/TcpClient.java</file>
+            <file>file:/home/michal/Desktop/workspace/pexeso_client/src/sound_pexeso/App.java</file>
             <file>file:/home/michal/Desktop/workspace/pexeso_client/resources/fxml/Game.fxml</file>
         </group>
     </open-files>

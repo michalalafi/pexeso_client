@@ -1,5 +1,8 @@
 package sound_pexeso;
 
+import controllers.IConnectedController;
+import controllers.LobbyController;
+import controllers.WaitingController;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -124,18 +127,18 @@ public class TcpClient implements Runnable{
         }
         int action = Integer.parseInt(parts[0]);
         switch(action){
-            case CLIENT_NAME_RESPONSE:
+            case CLIENTS_NAME_RESPONSE:
                     setClientName(parts);
                     break;
             case CLIENT_ID_RESPONSE:
                     setClientId(parts);
                     break;
+            case NEW_SESSION_RESPONE:
+                    newSessionResponse(parts);
+                    break;
             case SESSION_ID_RESPONSE:
                     setSessionId(parts);
                     break; 
-            case WAIT_FOR_PLAYER_TO_JOIN:
-                    waitForPlayerToJoin(null);
-                    break;
             case NEW_GAME_BEGIN_RESPONSE:
                     newGameBegin(parts);
                     break;  
@@ -161,8 +164,22 @@ public class TcpClient implements Runnable{
             case WANT_TO_PLAY_GAME_RESPONSE:
                     wantToPlayGame();
                     break;
-            case WAIT_FOR_OPPONENT_DECIDE_RESPONSE:
-                    waitForOpponentDecide();
+                    
+            case END_OF_GAME_RESPONSE:
+                    endOfGame();
+                    break;
+            case OPPONENTS_NAME_RESPONSE:
+                    setOpponentsName(parts);
+                    break;
+            case STATUS_RESPONSE:
+                    statusResponse(parts);
+                    break;
+            case NUMBER_OF_CLIENTS_ONLINE_RESPONSE:
+                    setNumberOfClientsOnline(parts);
+                    break;
+                    
+            case RETURN_TO_LOBBY_RESPONSE:
+                    returnToLobbyResponse(parts);
                     break;
         }
         
@@ -171,6 +188,13 @@ public class TcpClient implements Runnable{
     private void setClientName(String[] parts){
         System.out.println("New client name is: "+ parts[1]);
         client.setClientName(parts[1]);
+        
+        Platform.runLater(() -> {
+            IConnectedController controller = App.getConnectedController();
+            if(controller != null){
+                App.getConnectedController().setClientName(parts[1]);
+            }         
+        });
     }
     
     private void setClientId(String[] parts){
@@ -181,30 +205,41 @@ public class TcpClient implements Runnable{
             App.lobby();
         });
     }
-    
+    private void newSessionResponse(String[] parts){
+        System.out.println("New session response");
+        Platform.runLater(() -> {
+            App.waiting();
+        });
+    }
     private void setSessionId(String[] parts){
         System.out.println("New session id is: "+ parts[1]);
         Platform.runLater(() -> {
-            App.waiting();
-            App.getWaitingController().setSessionId(parts[1]);
+            IConnectedController controller = App.getConnectedController();
+            if(controller != null){
+                App.getConnectedController().setSessionId(parts[1]);
+            }  
         });
     }
-    private void waitForPlayerToJoin(String[] parts){
-        System.out.println("Menime duvod cekani");
-        Platform.runLater(() -> {
-            App.getWaitingController().setWaitingLabel("Wait for second player to join...");
+    private void statusResponse(String[] parts){
+        System.out.println("Menime status");
+        Platform.runLater(() -> {        
+            IConnectedController controller = App.getConnectedController();
+            if(controller != null){
+                App.getConnectedController().setStatus(parts[1]);
+            }  
         });
     }
     private void playersTurn(String[] parts){
         System.out.println("Players turn: " + parts[1]);
-        boolean isPlayersTurn = Integer.parseInt(parts[1]) != 1;
+        boolean isPlayersTurn = Integer.parseInt(parts[1]) == 1;
         Timer timer = new Timer();
         timer.schedule(new TimerTask(){
             @Override
             public void run(){
                 Platform.runLater(() -> { 
                     App.getGameController().getGameBoard().resetNotRevealedPlaySoundButtons();
-                    App.getGameController().getGameBoard().setDisableAllNotReveleadPlaySoundButtons(isPlayersTurn);
+                    App.getGameController().getGameBoard().setDisableAllNotReveleadPlaySoundButtons(!isPlayersTurn);
+                    App.getGameController().setPlayersTurn(isPlayersTurn);
                 });
             }
         }, 3000);
@@ -216,6 +251,7 @@ public class TcpClient implements Runnable{
             public void run(){
                 Platform.runLater(() -> { 
                     App.getGameController().getGameBoard().setDisableAllNotReveleadPlaySoundButtons(false);
+                    App.getGameController().getGameBoard().setFirstClickedButtonDisable(true);
                 });
             }
         }, 3000);
@@ -261,13 +297,47 @@ public class TcpClient implements Runnable{
     private void wantToPlayGame(){
         System.out.println("want to play");
         Platform.runLater(() -> {
-            App.getWaitingController().newGameConfirmation();
+            IConnectedController controller = App.getConnectedController();
+            if(controller != null){
+                if(controller instanceof WaitingController){
+                    WaitingController waitingController = (WaitingController) controller;
+                    waitingController.newGameConfirmation();
+                }
+            }
         });
     }
-    private void waitForOpponentDecide(){
-        System.out.println("Wait for opponent decide");
+    private void endOfGame(){
+        //Popneme dotaz jestli chteji hrat znovu?
+        System.out.println("End of game");
+        
         Platform.runLater(() -> {
-            App.getWaitingController().setWaitingLabel("Wait for opponent answer...");
+           App.getGameController().playAgainConfirmation();
+        });
+    }
+    private void setOpponentsName(String[] parts){
+        System.out.println("Setting opponents name");
+        
+        Platform.runLater(() -> {
+           App.getGameController().setOpponentName(parts[1]);
+        });
+    }
+    private void setNumberOfClientsOnline(String[] parts){
+        System.out.println("Setting number of online clients");
+        Platform.runLater(() -> {
+            IConnectedController controller = App.getConnectedController();
+            if(controller != null){
+                if(controller instanceof LobbyController){
+                    LobbyController lobbyController = (LobbyController) controller;
+                    lobbyController.setNumberOfOnlineClients(Integer.parseInt(parts[1]));
+                }
+            }
+        });
+        
+    }
+    private void returnToLobbyResponse(String[] parts){
+        System.out.println("Return to lobby response");
+        Platform.runLater(() -> {
+            App.lobby();
         });
     }
     

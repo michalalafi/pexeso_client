@@ -13,22 +13,24 @@
           <children>
             <HBox id="game-top-session-hbox">
               <children>
-                  <Label id="session-label" text="Session:"/>
-                  <Label id="session-id-label" text="0"/>
+                  <Label id="session-label" text="Session: 0" fx:id="lbSession"/>
               </children>                        
-            </HBox>
-            <HBox>
-                <Label id="nickname-label" fx:id="lbUserName" text="UserName" /> 
-                <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
-                <Label id="online-label" text="Online" />  
             </HBox>
             <HBox id="game-top-score-hbox">
                 <children>
-                    <Label id="score-label-left" text="Score:"/>
-                    <Label id="score-label-left" fx:id="lbP1Score" text="0"/>
+                    <VBox id="game-top-score-vbox" fx:id="P1ScoreVBox">
+                        <children>
+                            <Label id="nickname-label-left" fx:id="lbUserName" text="P1UserName"/>
+                            <Label id="score-label-left" fx:id="lbP1Score" text="Score: 0"/>
+                        </children>
+                    </VBox>
                     <Region  prefWidth="50.0" HBox.hgrow="ALWAYS" />
-                    <Label id="score-label-right" text="Score:"/>
-                    <Label id="score-label-right" fx:id="lbP2Score" text="0"/> 
+                    <VBox id="game-top-score-vbox" fx:id="P2ScoreVBox">
+                        <children>
+                            <Label id="nickname-label-right" fx:id="lbOpponentName" text="P2UserName"/>
+                            <Label id="score-label-right" fx:id="lbP2Score" text="Score: 0"/> 
+                        </children>
+                    </VBox>
                 </children>
             </HBox>
           </children>
@@ -38,5 +40,10 @@
         <controls.PexesoFlowPane id="game-board-flow-pane" fx:id="gameBoard"></controls.PexesoFlowPane>       
    </center>
    <bottom>
+        <HBox id="lobby-bottom-hbox">
+            <children>
+                <Label text="Status:" fx:id="lbStatus" id="status-label"/>
+            </children>
+        </HBox>
    </bottom>
 </BorderPane>

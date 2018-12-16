@@ -13,6 +13,8 @@ import javafx.scene.layout.FlowPane;
  * @author michal
  */
 public class PexesoFlowPane extends FlowPane {
+    PexesoPlaySoundButton firstRevealedButton = null;
+    
     private PexesoPlaySoundButton[] notReveleadPlaySoundButtons = new PexesoPlaySoundButton[GameController.numberOfPexesos];
     private PexesoPlaySoundButton[] revealedPlaySoundButtons = new PexesoPlaySoundButton[GameController.numberOfPexesos];
     
@@ -54,6 +56,7 @@ public class PexesoFlowPane extends FlowPane {
         revealedPlaySoundButtons[id] = btn;
     }
     public void resetNotRevealedPlaySoundButtons(){
+        this.firstRevealedButton = null;
         for(int i = 0; i < GameController.numberOfPexesos; i++){
             PexesoPlaySoundButton btn = this.notReveleadPlaySoundButtons[i];
             if(btn != null){
@@ -61,5 +64,16 @@ public class PexesoFlowPane extends FlowPane {
             }
         }
     }
+    public void setFirstClickedButton(PexesoPlaySoundButton button){
+        if(this.firstRevealedButton == null){
+            this.firstRevealedButton = button;
+        }
+    }
+    public void setFirstClickedButtonDisable(boolean value){
+        if(this.firstRevealedButton != null){
+            this.firstRevealedButton.setDisable(value);
+        }
+    }
+  
     
 }

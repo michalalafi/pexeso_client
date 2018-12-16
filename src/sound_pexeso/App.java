@@ -6,26 +6,16 @@
 package sound_pexeso;
 
 import controllers.GameController;
+import controllers.IConnectedController;
 import controllers.LobbyController;
 import controllers.WaitingController;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.StreamCorruptedException;
-import java.net.Socket;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import javax.imageio.IIOException;
-import utils.SoundPlayer;
 
 /**
  *
@@ -39,9 +29,9 @@ public class App extends Application {
     
     private static Stage primaryStage;
     
-    private static LobbyController lobby;
-    private static WaitingController waiting;
     private static GameController game;
+
+    private static IConnectedController connectedController;
     
     
     @Override
@@ -59,12 +49,17 @@ public class App extends Application {
         launch(args);     
     }
     
+    @Override
+    public void stop(){
+        System.out.println("Program se zavira");
+        Platform.exit();
+    }
     public static void menu(){
         try{
             
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(MENU_FXML));
             Parent root = fxmlLoader.load();
-            
+                       
             Scene scene = new Scene(root);
         
             primaryStage.setScene(scene);
@@ -81,7 +76,7 @@ public class App extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(LOBBY_FXML));
             Parent root = fxmlLoader.load();
             
-            lobby = (LobbyController) fxmlLoader.getController();
+            connectedController = (IConnectedController) fxmlLoader.getController();
             Scene scene = new Scene(root);
         
             primaryStage.setScene(scene);
@@ -96,7 +91,7 @@ public class App extends Application {
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(WAITING_FXML));
             Parent root = fxmlLoader.load();
             
-            waiting = (WaitingController) fxmlLoader.getController();
+            connectedController = (IConnectedController) fxmlLoader.getController();
             Scene scene = new Scene(root);
         
             primaryStage.setScene(scene);
@@ -114,6 +109,7 @@ public class App extends Application {
             Parent root = fxmlLoader.load();
             
             game = (GameController) fxmlLoader.getController();
+            connectedController = (IConnectedController) fxmlLoader.getController();
                       
             Scene scene = new Scene(root);
         
@@ -125,14 +121,12 @@ public class App extends Application {
         }
     }
     
-    public static LobbyController getLobbyController(){   
-        return lobby;
-    }
-    public static WaitingController getWaitingController(){
-        return waiting;
-    }
     public static GameController getGameController(){
         return game;
+    }
+    
+    public static IConnectedController getConnectedController(){
+        return connectedController;
     }
     
 }
