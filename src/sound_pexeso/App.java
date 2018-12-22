@@ -45,13 +45,33 @@ public class App extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args){      
+    public static void main(String[] args){
+        System.out.println("Start");
+        if(args.length == 1){}
+        else if(args.length == 2){}
+        else if(args.length == 3){
+            System.out.println("Argumenty jsou 3");
+            
+            System.out.println("1: " + args[0]);
+            System.out.println("2: " + args[1]);
+            System.out.println("3: " + args[2]);
+            
+            if(TcpClient.getClient().setClientIdFromString(args[2])){
+                TcpClient.getClient().setClientName(args[2]);
+                TcpClient.reconnect = true;
+            }
+        }
+        System.out.println("Konec zpracovani argumentu");
+        
+        
+        
         launch(args);     
     }
     
     @Override
     public void stop(){
-        System.out.println("Program se zavira");
+        //TODO poslat ze se odpojuji
+        System.out.println("Program is closing");
         Platform.exit();
     }
     public static void menu(){
@@ -59,7 +79,8 @@ public class App extends Application {
             
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(MENU_FXML));
             Parent root = fxmlLoader.load();
-                       
+            
+            connectedController = (IConnectedController) fxmlLoader.getController();
             Scene scene = new Scene(root);
         
             primaryStage.setScene(scene);
@@ -103,8 +124,6 @@ public class App extends Application {
     }
     public static void game(){
         try{
-            //Pozadat server o pocet puzzli
-            GameController.numberOfPexesos = 8;
             FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(GAME_FXML));
             Parent root = fxmlLoader.load();
             

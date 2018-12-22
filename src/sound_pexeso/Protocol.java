@@ -41,4 +41,15 @@ public class Protocol {
         public static final int NUMBER_OF_CLIENTS_ONLINE_RESPONSE = 43;
         
         public static final int RETURN_TO_LOBBY_RESPONSE = 44;
+        
+        public static final int IS_ALIVE_REQUEST = 45;
+        public static final int IS_ALIVE_RESPONSE = 45;
+        
+        public static final int RECONNECT_REQUEST = 46;
+        public static final int RECONNECT_RESPONSE = 46;
+        
+        public static final int NUMBER_OF_PEXESOS_RESPONSE = 47;
+        
+        public static final int OPPONENT_LEFT_RESPONSE = 56;
+       
 }

@@ -25,12 +25,14 @@ public class SoundPlayer {
             sound = new Media(new File(soundPath).toURI().toString());
         }
         catch(MediaException e){
-            System.out.println("Sound not loaded");
+            System.err.println("Sound not loaded");
+            return;
+        }      
+        mediaPlayer = new MediaPlayer(sound);
+        if(mediaPlayer == null){
+            System.err.println("Media player is null");
             return;
         }
-        
-        mediaPlayer = new MediaPlayer(sound);
-        
         mediaPlayer.setStopTime(new Duration(3000));
         mediaPlayer.play();
         

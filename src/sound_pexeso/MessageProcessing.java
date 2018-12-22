@@ -32,4 +32,22 @@ public class MessageProcessing {
         sb.append('\0');
         return sb.toString();
     }
+    public static String createMessageForServer(String requestId, String params){
+       return createMessageForServer("",requestId, params);
+    }
+    public static String createMessageForServerWithoutDelimiter(int requestId){
+        StringBuilder sb = new StringBuilder();     
+        sb.append(requestId);
+        sb.append('\0');
+        return sb.toString();
+    }
+    public static String createMessageForServer(Request request){
+        Client client = TcpClient.getClient();
+        if(client == null || request == null){
+            return null;
+        }
+        String clientId = Integer.toString(client.getClientId());
+        String requestId = Integer.toString(request.getRequestId());
+        return createMessageForServer(clientId, requestId, request.getParams());
+    }
 }

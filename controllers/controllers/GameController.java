@@ -48,7 +48,7 @@ public class GameController implements Initializable, IConnectedController{
     @FXML
     private Label lbStatus;
     
-    public static int numberOfPexesos = 4;
+    public static int numberOfPexesos = 8;
     /**
      * Initializes the controller class.
      */
@@ -110,12 +110,12 @@ public class GameController implements Initializable, IConnectedController{
 
     @Override
     public void connected() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
     public void disconnected() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override

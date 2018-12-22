@@ -32,4 +32,19 @@ public class Client {
     public void setClientName(String name){
         this.clientName = name;
     }
+    
+    public boolean setClientIdFromString(String value){
+        
+        String pomName = value;
+        pomName = pomName.replaceFirst("guest", "");
+        try{
+            this.clientId = Integer.parseInt(pomName);
+        }
+        catch(NumberFormatException e){
+            return false;
+        }
+        
+        System.out.println("Novy id podle jmena je: " + this.clientId );
+        return true;
+    }
 }

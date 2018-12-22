@@ -16,7 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import sound_pexeso.App;
+import javafx.scene.control.Label;
 import sound_pexeso.TcpClient;
 
 /**
@@ -24,22 +24,38 @@ import sound_pexeso.TcpClient;
  *
  * @author Michal-PC
  */
-public class MenuController implements Initializable {
+public class MenuController implements Initializable, IConnectedController {
 
     @FXML
     private Button btnPlayGame;
+    @FXML
+    private Button btnReconnect;
+    @FXML
+    private Label lbStatus;
+    
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        System.out.println("Menu controller - initialize");
+        
+        if(TcpClient.reconnect){
+            this.btnReconnect.setVisible(true);
+        }
+        else{
+            this.btnReconnect.setVisible(false);
+        }
+        setupConnection();
     }    
-
+    @FXML
+    private void reconnect(ActionEvent event){
+        TcpClient.getConnection().reconnect();
+    }
     @FXML
     private void playGame(ActionEvent event) {
-        setupConnection();
+        TcpClient.getConnection().sendLoginLobbyRequest();
     }
     
     private void setupConnection(){
@@ -50,15 +66,44 @@ public class MenuController implements Initializable {
         Thread tcpClientThread = new Thread(connection);
         tcpClientThread.setDaemon(true);
         tcpClientThread.start();
-        
-        connection.sendLoginLobbyRequest();
-        
-        //App.lobby();
     }
     
     @FXML
     private void exitGame(ActionEvent event){
         Platform.exit();
     }
-    
+    @Override
+    public void setStatus(String status) {
+        this.lbStatus.setText(status);
+    }
+
+    @Override
+    public void requestClientName() {
+        return;
+    }
+
+    @Override
+    public void setClientName(String clientName) {
+        return;
+    }
+
+    @Override
+    public void connected() {
+        return;
+    }
+
+    @Override
+    public void disconnected() {
+        return;
+    }
+
+    @Override
+    public void setSessionId(String sessionId) {
+        return;
+    }
+
+    @Override
+    public void requestSessionId() {
+        return;
+    }
 }

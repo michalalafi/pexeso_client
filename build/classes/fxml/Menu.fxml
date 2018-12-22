@@ -14,8 +14,16 @@
       <VBox id="menu-vbox">
          <children>
             <Button id="default-button" fx:id="btnPlayGame" onAction="#playGame" text="Play game" />
+            <Button id="default-button" fx:id="btnReconnect" onAction="#reconnect" text="Reconnect" />
             <Button id="default-button" fx:id="btnExit" onAction="#exitGame" text="Exit" />
          </children>
       </VBox>
    </center>
+   <bottom>
+        <HBox id="menu-bottom-hbox">
+            <children>
+                <Label text="Status:" fx:id="lbStatus" id="status-label"/>
+            </children>
+        </HBox>
+   </bottom>
 </BorderPane>

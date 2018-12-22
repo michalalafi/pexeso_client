@@ -25,14 +25,6 @@
             </children>
         </VBox>
    </top>
-   <center>
-      <VBox id="waiting-center-vbox">
-         <children>
-            <Label id="waiting-header-label" fx:id="lbWaiting" text="Waiting..."/>
-            <Region  prefHeight="50.0" HBox.hgrow="ALWAYS" />
-         </children>
-      </VBox>
-   </center>
    <bottom>
         <HBox id="lobby-bottom-hbox">
             <children>

@@ -1,5 +1,6 @@
 package sound_pexeso;
 
+import controllers.GameController;
 import controllers.IConnectedController;
 import controllers.LobbyController;
 import controllers.WaitingController;
@@ -26,8 +27,15 @@ public class TcpClient implements Runnable{
     private static Client client;
     private ExpandedBufferedReader reader;
     private PrintWriter writer;
+    private Socket socket;
+    private Timer isAliveTimer;
     
-    private static final String SOUNDS_PATH="../sounds/";
+    public static boolean reconnect = false;
+    public static String adress = "192.168.0.103";
+    public static int port = 10000;
+    
+    
+    private static final String SOUNDS_PATH="../../sounds/";
     public TcpClient(){
         this.reader = null;
         this.writer = null;
@@ -35,7 +43,20 @@ public class TcpClient implements Runnable{
     }
     @Override
     public void run(){
-            connect();
+        //TODO spustime timer na kontrolovani odpovedi
+        //TODO spustime timer na kontrolovani jestli je server dostupny
+        isAliveTimer = new Timer();
+        
+       /* isAliveTimer.schedule(new TimerTask(){
+            @Override
+            public void run(){
+                connection.sendSimpleMessage(IS_ALIVE_REQUEST, "");
+                System.out.println("Posilam is alive");
+            }
+        }, 0, 10000); */
+        
+        
+        connect();
     }
     public static void setConnection(TcpClient newConnection){
         connection = newConnection;
@@ -44,57 +65,154 @@ public class TcpClient implements Runnable{
         return connection;
     }
     public static Client getClient(){
+        if(client == null){
+            client = new Client(); 
+        }            
         return client;
     }
     private void connect(){
-        Socket s;
+        // Pokud je pripojeny nedelame nic   
+        if(isConnected()){
+            return;
+        }
+        
+        // Nastavime socket a reader a writer
         try{
-            s = new Socket("127.0.0.1", 10000);
-            InetAddress adress = s.getInetAddress();
-            System.out.println("Connecting to: " + adress.getHostAddress() + " [" + adress.getHostName()+"]");
+            System.out.println("Zkousime se pripojit");
+            this.socket = new Socket(adress, port);
+            InetAddress adress = socket.getInetAddress();
+            
+            client = getClient();
+            
+            reader = new ExpandedBufferedReader(new InputStreamReader(socket.getInputStream()));
+            writer = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+            
+            //TODO osetrit jestli byl odpojeny
+            System.out.println("Connected to: " + adress.getHostAddress() + " [" + adress.getHostName()+"]");
+            
+            //Nastavime vlakno aby poslouchalo 
+            listen();
         }
-        catch(IOException e){ return;}
-        try {
-            reader = new ExpandedBufferedReader(new InputStreamReader(s.getInputStream()));
-            writer = new PrintWriter(new OutputStreamWriter(s.getOutputStream()));
+        catch(IOException e){ 
+            //TODO udelat
+            return;
         }
-        catch(NullPointerException | IOException e){ return;}
-        client = new Client();
-        System.out.println("Client connected!");
-        listen();
+    }
+    public void reconnect(){
+        //Pokud byl odpojen posleme zadost o pripojeni a zablokujeme tlacitka na new game
+        if(reconnect == true){
+            System.out.println("Odesilame zadost o reconnect");
+            send(new Request(RECONNECT_REQUEST));
+        }
+    }
+    private boolean isConnected(){
+        boolean isConnected = socket != null && socket.isConnected() && !socket.isClosed();
+        return isConnected;
     }
     /**
      * 
      */
     public void sendLoginLobbyRequest(){
-        String message = Integer.toString(Protocol.LOGIN_TO_LOBBY_REQUEST);
-        System.out.println("Zprava pro server je: " + message);
-        
+        String message = MessageProcessing.createMessageForServerWithoutDelimiter(Protocol.LOGIN_TO_LOBBY_REQUEST);
+        System.out.println("Lobby - Zprava pro server je: " + message);
         Timer timer = new Timer();
         timer.schedule(new TimerTask(){
+            int attempts = 0;
             @Override
             public void run(){
-                if(connection.send(message))
+                if(attempts >= 2){
                     this.cancel();
+                    Platform.runLater(() -> {
+                        App.getConnectedController().disconnected();
+                        App.getConnectedController().setStatus("Server is not avaible..");
+                    });
+                }
+                if(connection.send(message)){
+                    this.cancel();
+                }
+                attempts += 1;
             }
         }, 100, 100);
     }
     public void sendSimpleMessage(int requestId, String params){
-        String message = MessageProcessing.createMessageForServer(Integer.toString(client.getClientId()), Integer.toString(requestId), params);
-        //TODO posilat dokud send nebude true?
-        send(message);    
+        if(client != null && client.getClientId() != -1){
+            String message = MessageProcessing.createMessageForServer(Integer.toString(client.getClientId()), Integer.toString(requestId), params);
+
+            send(message);  
+        }  
     }
-    public boolean send(String message){
-        if(writer == null){
-            System.out.println("Writer je NULL");
+    public void sendRequest(Request request){
+        if(client != null && client.getClientId() != -1){
+            String message = MessageProcessing.createMessageForServer(Integer.toString(client.getClientId()), Integer.toString(request.getRequestId()), request.getParams());
+
+            send(message);  
+        }  
+        
+    }
+    public boolean send(Request request){
+        //TODO osetrit jestli je zprava validni
+        if(writer != null){
+            try{
+                String message = MessageProcessing.createMessageForServer(request);
+                if(message == null){
+                    return false;
+                }
+                //TODO pridat request do pole
+                System.out.println("Sending message: '" + message + "'");
+                
+                writer.print(message);
+                writer.flush();
+                //Pokud se nam podarilo poslat jsme pripojeni
+                Platform.runLater(() -> {
+                    App.getConnectedController().connected();
+                });
+                
+                }
+            catch(Exception e){
+                Platform.runLater(() -> {
+                    App.getConnectedController().disconnected();
+                });
+                return false;
+            }  
+        }
+        else{
+            System.out.println("Writer is not avaible");
+            Platform.runLater(() -> {
+                    App.getConnectedController().disconnected();
+                });
             return false;
         }
-        try{
-            writer.println(message);
-            writer.flush();
-            System.out.println("Message sended");
+        
+        return true;
+    }
+    public boolean send(String message){
+        //TODO osetrit jestli je zprava validni
+        if(writer != null){
+            try{
+                System.out.println("Sending message: " + message);
+                
+                writer.println(message);
+                writer.flush();
+                //Pokud se nam podarilo poslat jsme pripojeni
+                Platform.runLater(() -> {
+                    App.getConnectedController().connected();
+                });
+                
+                }
+            catch(Exception e){
+                Platform.runLater(() -> {
+                    App.getConnectedController().disconnected();
+                });
+                return false;
+            }  
         }
-        catch(Exception e){ return false;}
+        else{
+            System.out.println("Writer is not avaible");
+            Platform.runLater(() -> {
+                    App.getConnectedController().disconnected();
+                });
+            return false;
+        }
         
         return true;
     }
@@ -181,6 +299,12 @@ public class TcpClient implements Runnable{
             case RETURN_TO_LOBBY_RESPONSE:
                     returnToLobbyResponse(parts);
                     break;
+            case NUMBER_OF_PEXESOS_RESPONSE:
+                    setNumberOfPexesos(parts);
+                    break;
+            case OPPONENT_LEFT_RESPONSE:
+                    opponentLeft(parts);
+                    break;
         }
         
     }
@@ -200,7 +324,7 @@ public class TcpClient implements Runnable{
     private void setClientId(String[] parts){
         System.out.println("New client id is: " + parts[1]);
         client.setClientId(Integer.parseInt(parts[1]));
-        
+        reconnect = false;
         Platform.runLater(() -> {
             App.lobby();
         });
@@ -339,6 +463,21 @@ public class TcpClient implements Runnable{
         Platform.runLater(() -> {
             App.lobby();
         });
+    }
+    
+    private void setNumberOfPexesos(String[] parts){
+        System.out.println("Nastavujeme pocet pexes");
+        
+        GameController.numberOfPexesos = Integer.parseInt(parts[1]);
+    }
+    
+    private void opponentLeft(String[] parts){
+        System.out.println("Opponent left");
+        
+        Platform.runLater(() -> {
+            App.getGameController().getGameBoard().setDisableAllNotReveleadPlaySoundButtons(true);
+        });
+        
     }
     
 }

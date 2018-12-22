@@ -14,7 +14,7 @@ and open the template in the editor.
 
 #menu-vbox, #lobby-top-hbox, #lobby-center-vbox, #lobby-bottom-hbox, #lobby-top-hbox, 
 #game-center-hbox, #game-top-session-hbox, #waiting-top-session-hbox, #waiting-top-hbox,
-#waiting-center-vbox, #game-top-score-vbox{
+#waiting-center-vbox, #game-top-score-vbox, #menu-bottom-hbox{
     -fx-alignment: center;
     -fx-spacing: 5px;
 }
