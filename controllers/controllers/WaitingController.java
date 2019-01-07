@@ -12,8 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import sound_pexeso.Client;
 import sound_pexeso.Protocol;
+import sound_pexeso.Request;
 import sound_pexeso.TcpClient;
 
 /**
@@ -48,12 +48,12 @@ public class WaitingController implements Initializable, IConnectedController {
         if(alert.getResult() == ButtonType.YES){
             //Posleme na server ze chceme hrat
             System.out.println("Yes");
-            TcpClient.getConnection().sendSimpleMessage(Protocol.NEW_GAME_REQUEST, "1");
+            TcpClient.getConnection().sendRequest(new Request(Protocol.NEW_GAME_REQUEST, "1"));
         }
         else if( alert.getResult() == ButtonType.NO){
             //Posleme na server ze nechceme hrat
             System.out.println("No");
-            TcpClient.getConnection().sendSimpleMessage(Protocol.NEW_GAME_REQUEST, "0");
+            TcpClient.getConnection().sendRequest(new Request(Protocol.NEW_GAME_REQUEST, "0"));
         }
         
         
@@ -66,13 +66,15 @@ public class WaitingController implements Initializable, IConnectedController {
 
     @Override
     public void connected() {
-        /*lbOnline.setText("Online");
-        lbOnline.setStyle("-fx-text-fill: #00ff00"); */
+        System.out.println("WAITING CONTROLLER - connected");
     }
 
     @Override
     public void disconnected() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        System.out.println("WAITING CONTROLLER - disconnected");
+        TcpClient.getConnection().disconnect();
+        
+        setupConnection();
     }
 
     @Override
@@ -83,16 +85,31 @@ public class WaitingController implements Initializable, IConnectedController {
 
     @Override
     public void requestSessionId() {
-        TcpClient.getConnection().sendSimpleMessage(Protocol.SESSION_ID_REQUEST, "");
+        TcpClient.getConnection().sendRequest(new Request(Protocol.SESSION_ID_REQUEST));
     }
 
     @Override
     public void requestClientName() {
-        TcpClient.getConnection().sendSimpleMessage(Protocol.CLIENTS_NAME_REQUEST, "");
+        TcpClient.getConnection().sendRequest(new Request(Protocol.CLIENTS_NAME_REQUEST));
     }
 
     @Override
     public void setStatus(String status) {
         this.lbStatus.setText(status);
+    }
+    @Override
+    public void setupConnection(){
+        //Vytvorime spojeni
+        TcpClient connection = new TcpClient();
+        TcpClient.setConnection(connection);
+        //Vytvorime vlakno pro naslouchani
+        Thread tcpClientThread = new Thread(connection);
+        tcpClientThread.setDaemon(true);
+        tcpClientThread.start();
+    }
+
+    @Override
+    public void disableControls(boolean value) {
+        
     }
 }

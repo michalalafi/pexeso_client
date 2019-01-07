@@ -27,4 +27,8 @@ public interface IConnectedController {
     
     public void requestSessionId();
     
+    public void setupConnection();
+    
+    public void disableControls(boolean value);
+    
 }

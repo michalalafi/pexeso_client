@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import sound_pexeso.App;
 import sound_pexeso.Client;
 import sound_pexeso.Protocol;
+import sound_pexeso.Request;
 import sound_pexeso.TcpClient;
 
 /**
@@ -43,9 +44,7 @@ public class LobbyController implements Initializable, IConnectedController {
     
     @FXML
     private void newGame(ActionEvent event) {
-        TcpClient.getConnection().sendSimpleMessage(Protocol.NEW_SESSION_REQUEST,"");
-        //TODO pozadat o prirazeni sessiony
-        //App.game();
+        TcpClient.getConnection().sendRequest(new Request(Protocol.NEW_SESSION_REQUEST));
     }
 
     @FXML
@@ -53,7 +52,7 @@ public class LobbyController implements Initializable, IConnectedController {
         App.menu();
     }
     public void requestNumberOfOnlineClients(){
-        TcpClient.getConnection().sendSimpleMessage(Protocol.NUMBER_OF_CLIENTS_ONLINE_REQUEST, "");
+        TcpClient.getConnection().sendRequest(new Request(Protocol.NUMBER_OF_CLIENTS_ONLINE_REQUEST));
     }
     public void setNumberOfOnlineClients(int number){
         lbNumberOfOnlineClients.setText("Online players: " + number);
@@ -71,8 +70,14 @@ public class LobbyController implements Initializable, IConnectedController {
 
     @Override
     public void disconnected() {
+        System.out.println("LOBBY CONTROLLER  - disconnected");
+        
         lbOnline.setText("Offline");
         lbOnline.setStyle("-fx-text-fill: #ff0000");
+        
+        TcpClient.getConnection().disconnect();
+        
+        setupConnection();
     }
 
     @Override
@@ -87,12 +92,28 @@ public class LobbyController implements Initializable, IConnectedController {
 
     @Override
     public void requestClientName() {
-        TcpClient.getConnection().sendSimpleMessage(Protocol.CLIENTS_NAME_REQUEST, "");
+        TcpClient.getConnection().sendRequest(new Request(Protocol.CLIENTS_NAME_REQUEST));
     }
 
     @Override
     public void setStatus(String status) {
         this.lbStatus.setText(status);
+    }
+    @Override
+    public void setupConnection(){
+        //Vytvorime spojeni
+        TcpClient connection = new TcpClient();
+        TcpClient.setConnection(connection);
+        //Vytvorime vlakno pro naslouchani
+        Thread tcpClientThread = new Thread(connection);
+        tcpClientThread.setDaemon(true);
+        tcpClientThread.start();
+    }
+
+    @Override
+    public void disableControls(boolean value) {
+        this.btnBack.setDisable(value);
+        this.btnNewGame.setDisable(value);
     }
     
     

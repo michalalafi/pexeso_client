@@ -7,20 +7,17 @@ package controllers;
 
 import controls.PexesoFlowPane;
 import controls.PexesoPlaySoundButton;
-import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import sound_pexeso.App;
-import sound_pexeso.Client;
 import sound_pexeso.Protocol;
+import sound_pexeso.Request;
 import sound_pexeso.TcpClient;
 
 /**
@@ -66,7 +63,7 @@ public class GameController implements Initializable, IConnectedController{
         int pexesoId = sender.getButonId();
         // Posli serveru stisknute pexeso
         // Server az posle zpravu zacne hrat zvuk
-        TcpClient.getConnection().sendSimpleMessage(Protocol.PEXESO_REVEAL_REQUEST, Integer.toString(pexesoId));
+        TcpClient.getConnection().sendRequest(new Request(Protocol.PEXESO_REVEAL_REQUEST, Integer.toString(pexesoId)));
     }
     
     public PexesoFlowPane getGameBoard(){
@@ -84,12 +81,12 @@ public class GameController implements Initializable, IConnectedController{
         if(alert.getResult() == ButtonType.YES){
             //Posleme na server ze chceme hrat
             System.out.println("Yes");
-            TcpClient.getConnection().sendSimpleMessage(Protocol.NEW_GAME_REQUEST, "1");
+            TcpClient.getConnection().sendRequest(new Request(Protocol.NEW_GAME_REQUEST, "1"));
         }
         else if( alert.getResult() == ButtonType.NO){
             //Posleme na server ze nechceme hrat
             System.out.println("No");
-            TcpClient.getConnection().sendSimpleMessage(Protocol.NEW_GAME_REQUEST, "0");
+            TcpClient.getConnection().sendRequest(new Request(Protocol.NEW_GAME_REQUEST, "0"));
         }
         
         
@@ -110,12 +107,15 @@ public class GameController implements Initializable, IConnectedController{
 
     @Override
     public void connected() {
-        
+        System.out.println("GAME CONTROLLER - connected");
     }
 
     @Override
     public void disconnected() {
+        System.out.println("MENU CONTROLLER - disconnected");
+        TcpClient.getConnection().disconnect();
         
+        setupConnection();
     }
 
     @Override
@@ -125,12 +125,12 @@ public class GameController implements Initializable, IConnectedController{
 
     @Override
     public void requestSessionId() {
-        TcpClient.getConnection().sendSimpleMessage(Protocol.SESSION_ID_REQUEST, "");
+        TcpClient.getConnection().sendRequest(new Request(Protocol.SESSION_ID_REQUEST));
     }
 
     @Override
     public void requestClientName() {
-        TcpClient.getConnection().sendSimpleMessage(Protocol.CLIENTS_NAME_REQUEST, "");
+        TcpClient.getConnection().sendRequest(new Request(Protocol.CLIENTS_NAME_REQUEST));
     }
 
     @Override
@@ -141,6 +141,21 @@ public class GameController implements Initializable, IConnectedController{
     @Override
     public void setStatus(String status) {
         this.lbStatus.setText(status);
+    }
+    @Override
+    public void setupConnection(){
+        //Vytvorime spojeni
+        TcpClient connection = new TcpClient();
+        TcpClient.setConnection(connection);
+        //Vytvorime vlakno pro naslouchani
+        Thread tcpClientThread = new Thread(connection);
+        tcpClientThread.setDaemon(true);
+        tcpClientThread.start();
+    }
+
+    @Override
+    public void disableControls(boolean value) {
+        
     }
     
     

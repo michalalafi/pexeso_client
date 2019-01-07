@@ -11,12 +11,12 @@ package controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import sound_pexeso.App;
 import sound_pexeso.TcpClient;
 
 /**
@@ -47,7 +47,6 @@ public class MenuController implements Initializable, IConnectedController {
         else{
             this.btnReconnect.setVisible(false);
         }
-        setupConnection();
     }    
     @FXML
     private void reconnect(ActionEvent event){
@@ -58,7 +57,8 @@ public class MenuController implements Initializable, IConnectedController {
         TcpClient.getConnection().sendLoginLobbyRequest();
     }
     
-    private void setupConnection(){
+    @Override
+    public void setupConnection(){
         //Vytvorime spojeni
         TcpClient connection = new TcpClient();
         TcpClient.setConnection(connection);
@@ -70,7 +70,7 @@ public class MenuController implements Initializable, IConnectedController {
     
     @FXML
     private void exitGame(ActionEvent event){
-        Platform.exit();
+        App.exitApp();
     }
     @Override
     public void setStatus(String status) {
@@ -79,31 +79,40 @@ public class MenuController implements Initializable, IConnectedController {
 
     @Override
     public void requestClientName() {
-        return;
+        System.out.println("MENU CONTROLLER - RequestClientName");
     }
 
     @Override
     public void setClientName(String clientName) {
-        return;
+        System.out.println("MENU CONTROLLER - SetClientName");
     }
 
     @Override
     public void connected() {
-        return;
+        System.out.println("MENU CONTROLLER - Connected");
     }
 
     @Override
     public void disconnected() {
-        return;
+        System.out.println("MENU CONTROLLER - disconnected");
+        TcpClient.getConnection().disconnect();
+        
+        setupConnection();
     }
 
     @Override
     public void setSessionId(String sessionId) {
-        return;
+        System.out.println("MENU CONTROLLER - SetSessionId");
     }
 
     @Override
     public void requestSessionId() {
-        return;
+        System.out.println("MENU CONTROLLER - RequestSessionId");
+    }
+
+    @Override
+    public void disableControls(boolean value) {
+        this.btnPlayGame.setDisable(value);
+        this.btnReconnect.setDisable(value);
     }
 }
